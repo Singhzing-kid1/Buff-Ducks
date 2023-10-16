@@ -90,6 +90,6 @@ void opcontrol() {
 			rightMotorGroup.brake();
 		}
 
-		pros::delay(20);
+		delay(20);
 	}
 }
