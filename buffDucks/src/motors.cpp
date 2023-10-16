@@ -14,8 +14,6 @@ Motor rightMotor3 (3, E_MOTOR_GEAR_GREEN, false, E_MOTOR_ENCODER_DEGREES); // We
 Motor_Group leftMotorGroup ({leftMotor1, leftMotor2, leftMotor3});
 Motor_Group rightMotorGroup ({rightMotor1, rightMotor2, rightMotor3});
 
-
-
 void leftDrive(int32_t speed){
     leftMotorGroup.move(speed);
 }
