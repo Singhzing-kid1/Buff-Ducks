@@ -82,14 +82,18 @@ void opcontrol() {
 
 	while (true) {
 		
-		if(master.get_analog(ANALOG_LEFT_Y) != 0 || master.get_analog(ANALOG_RIGHT_Y) != 0){
+		if(master.get_analog(ANALOG_LEFT_Y) != 0){
 			leftDrive(deadzone(ANALOG_LEFT_Y, ANALOG_LEFT_X));
-			rightDrive(deadzone(ANALOG_RIGHT_Y, ANALOG_RIGHT_X));
 		} else {
 			leftMotorGroup.brake();
+		}
+
+		if(master.get_analog(ANALOG_RIGHT_Y) != 0) {
+			rightDrive(deadzone(ANALOG_RIGHT_Y, ANALOG_RIGHT_X));
+		} else {
 			rightMotorGroup.brake();
 		}
 
-		delay(20);
+		pros::delay(20);
 	}
 }
