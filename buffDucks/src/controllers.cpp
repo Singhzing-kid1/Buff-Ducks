@@ -6,7 +6,7 @@ using namespace pros;
 Controller master (E_CONTROLLER_MASTER);
 
 int32_t deadzone(controller_analog_e_t valueY, controller_analog_e_t valueX){
-    if ((master.get_analog(valueY) >= 27 || master.get_analog(valueY) <= -27) && master.get_analog(valueX) == 0){ // some ugly computation to figure out whether or 
+    if ((master.get_analog(valueY) >= 27 || master.get_analog(valueY) <= -27) && master.get_analog(valueX) == 0){ // some ugly computation to figure out whether or not the analoug sticks are being moved past a horizontal line that determines the deadzones 
         return master.get_analog(valueY);
     } else if ((master.get_analog(valueY) >= 27 || master.get_analog(valueY) <= -27) && master.get_analog(valueX) != 0){
         if(master.get_analog(valueY) < 0){
