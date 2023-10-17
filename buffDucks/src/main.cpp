@@ -80,18 +80,25 @@ void autonomous() {}
  */
 void opcontrol() {
 
+	int32_t leftSpeed = 0;
+	int32_t rightSpeed = 0;
+
 	while (true) {
 		
 		if(master.get_analog(ANALOG_LEFT_Y) != 0){
-			leftDrive(deadzone(ANALOG_LEFT_Y, ANALOG_LEFT_X));
+			leftSpeed = accelerate(clamp(deadzone(ANALOG_LEFT_Y, ANALOG_LEFT_X)), leftSpeed);
+			leftDrive(leftSpeed);
 		} else {
 			leftMotorGroup.brake();
+			leftSpeed = 0;
 		}
 
 		if(master.get_analog(ANALOG_RIGHT_Y) != 0) {
+			rightSpeed = accelerate(clamp(deadzone(ANALOG_RIGHT_Y, ANALOG_RIGHT_X)), rightSpeed);
 			rightDrive(deadzone(ANALOG_RIGHT_Y, ANALOG_RIGHT_X));
 		} else {
 			rightMotorGroup.brake();
+			rightSpeed = 0;
 		}
 
 		pros::delay(20);

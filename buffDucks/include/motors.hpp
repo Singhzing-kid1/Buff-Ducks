@@ -13,3 +13,5 @@ extern Motor_Group rightMotorGroup;
 
 void leftDrive(int32_t);
 void rightDrive(int32_t);
+
+int32_t accelerate(int32_t, int32_t);

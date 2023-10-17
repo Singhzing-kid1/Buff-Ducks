@@ -22,3 +22,15 @@ int32_t deadzone(controller_analog_e_t valueY, controller_analog_e_t valueX){
         return (int32_t)0;
     }
 }
+
+int32_t clamp(int32_t analogValue) {
+    if(abs(analogValue) >= 100){
+        if(analogValue < 0){
+            return (int32_t)-100;
+        } else if(analogValue > 0){
+            return (int32_t)100;
+        }
+    } else {
+        return analogValue;
+    }
+}
