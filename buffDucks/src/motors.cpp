@@ -15,22 +15,19 @@ Motor_Group leftMotorGroup ({leftMotor1, leftMotor2, leftMotor3});
 Motor_Group rightMotorGroup ({rightMotor1, rightMotor2, rightMotor3});
 
 void leftDrive(int32_t speed){
-    cout << "left moving at " << speed << endl;
     leftMotorGroup.move(speed);
 }
 
 void rightDrive(int32_t speed){
-    cout << "right moving at " << speed << endl;
     rightMotorGroup.move(speed);
 }
 
 int32_t accelerate(int32_t newSpeed, int32_t oldSpeed) {
     if(newSpeed == oldSpeed){
-        cout << "at speed" << endl;
         return newSpeed;
     } else if(oldSpeed < newSpeed){
-        return oldSpeed + (int32_t)5;
+        return oldSpeed + (int32_t)3;
     } else if(oldSpeed > newSpeed){
-        return oldSpeed - (int32_t)5;
+        return oldSpeed - (int32_t)3;
     }
 }

@@ -26,9 +26,8 @@ void on_center_button() {
  */
 void initialize() {
 	lcd::initialize();
-	lcd::set_text(1, "Hello PROS User!");
-
-	lcd::register_btn1_cb(on_center_button);
+	lcd::set_background_color(0, 0, 0);
+	lcd::set_text_color(255, 255, 255);
 
 	leftMotorGroup.set_brake_modes(E_MOTOR_BRAKE_COAST);
 	rightMotorGroup.set_brake_modes(E_MOTOR_BRAKE_COAST);
@@ -101,6 +100,11 @@ void opcontrol() {
 			rightSpeed = 0;
 		}
 
-		pros::delay(20);
+		lcd::print(0, "Left Motors: | Right Motors: ");
+		lcd::print(1, "1 (port 1): %g | 1 (port 4): %g", leftMotor1.get_temperature(), rightMotor1.get_temperature());
+		lcd::print(1, "2 (port 2): %g | 2 (port 5): %g", leftMotor2.get_temperature(), rightMotor2.get_temperature());
+		lcd::print(1, "3 (port 3): %g | 3 (port 6): %g", leftMotor3.get_temperature(), rightMotor3.get_temperature());
+
+		delay(20);
 	}
 }
