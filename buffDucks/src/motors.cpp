@@ -26,8 +26,8 @@ int32_t accelerate(int32_t newSpeed, int32_t oldSpeed) {
     if(newSpeed == oldSpeed){
         return newSpeed;
     } else if(oldSpeed < newSpeed){
-        return oldSpeed + (int32_t)5;
+        return oldSpeed + (int32_t)3;
     } else if(oldSpeed > newSpeed){
-        return oldSpeed - (int32_t)5;
+        return oldSpeed - (int32_t)3;
     }
 }
