@@ -95,7 +95,7 @@ void opcontrol() {
 
 		if(master.get_analog(ANALOG_RIGHT_Y) != 0) {
 			rightSpeed = accelerate(clamp(deadzone(ANALOG_RIGHT_Y, ANALOG_RIGHT_X)), rightSpeed);
-			rightDrive(deadzone(ANALOG_RIGHT_Y, ANALOG_RIGHT_X));
+			rightDrive(rightSpeed);
 		} else {
 			rightMotorGroup.brake();
 			rightSpeed = 0;
