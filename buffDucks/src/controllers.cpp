@@ -34,3 +34,53 @@ int32_t clamp(int32_t analogValue) {
         return analogValue;
     }
 }
+
+bool tempWarningRumbler(string side, int motorNum, Motor motor, bool haveWarned){
+    if(!haveWarned){
+        if(motor.get_temperature() >= 50){
+            if(side == "right"){
+                switch(motorNum){
+                    case 1:
+                        master.rumble(". - .    . - -");
+                        return true;
+                        break;
+
+                    case 2:
+                        master.rumble(". - .    . . -");
+                        return true;
+                        break;
+
+                    case 3:
+                        master.rumble(". - .    . . .");
+                        return true;
+                        break;
+                }
+
+            } else if(side == "left"){
+                switch(motorNum){
+                    case 1:
+                        master.rumble(". - . .    . - -");
+                        return true;
+                        break;
+
+                    case 2:
+                        master.rumble(". - . .    . . -");
+                        return true;
+                        break;
+
+                    case 3:
+                        master.rumble(". - . .    . . .");
+                        return true;
+                        break;
+                }
+
+            }
+        } else {
+            return false;
+        }
+    } else {
+        return true;
+    }
+
+
+}
