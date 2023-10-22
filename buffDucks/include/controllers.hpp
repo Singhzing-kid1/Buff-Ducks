@@ -1,3 +1,4 @@
+using namespace std;
 using namespace pros;
 
 extern Controller master;
