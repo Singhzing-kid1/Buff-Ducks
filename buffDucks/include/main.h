@@ -77,6 +77,7 @@ void opcontrol(void);
  */
 #include "controllers.hpp"
 #include "motors.hpp"
+#include "config.hpp"
 //#include <iostream>
 #endif
 

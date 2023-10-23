@@ -8,14 +8,14 @@ using namespace pros;
  * When this callback is fired, it will toggle line 2 of the LCD text between
  * "I was pressed!" and nothing.
  */
-void on_center_button() {
-	static bool pressed = false;
-	pressed = !pressed;
-	if (pressed) {
-		lcd::set_text(2, "I was pressed!");
-	} else {
-		lcd::clear_line(2);
-	}
+void onLeftButton(){
+	nonDefaultDriver = true;
+	driverIndex = 1;
+}
+
+void onCenterButton(){
+	nonDefaultDriver = true;
+	driverIndex = 2;
 }
 
 /**
@@ -28,6 +28,9 @@ void initialize() {
 	lcd::initialize();
 	lcd::set_background_color(0, 0, 0);
 	lcd::set_text_color(255, 255, 255);
+
+	lcd::register_btn0_cb(onLeftButton);
+	lcd::register_btn0_cb(onCenterButton);
 
 	leftMotorGroup.set_brake_modes(E_MOTOR_BRAKE_COAST);
 	rightMotorGroup.set_brake_modes(E_MOTOR_BRAKE_COAST);
@@ -93,7 +96,6 @@ void opcontrol() {
 	bool rightMotor3TempWarning = false;
 
 	while (true) {
-		
 		if(master.get_analog(ANALOG_LEFT_Y) != 0){
 			leftSpeed = accelerate(clamp(deadzone(ANALOG_LEFT_Y, ANALOG_LEFT_X)), leftSpeed);
 			leftDrive(leftSpeed);
