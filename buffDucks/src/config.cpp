@@ -4,7 +4,7 @@ using namespace std;
 using namespace pros;
 
 driverSettings mainSettings;
-driverSettings driver1;
+driverSettings leo;
 driverSettings driver2;
 
 driverSettings initDriver(driverSettings driver, int member){
@@ -29,7 +29,7 @@ driverSettings initDriver(driverSettings driver, int member){
 int driverIndex = 0; // default to main settings
 bool nonDefaultDriver;
 
-vector<driverSettings> drivers = {mainSettings, initDriver(driver1, 0), initDriver(driver2, 1)};
+vector<driverSettings> drivers = {mainSettings, initDriver(leo, 0), initDriver(driver2, 1)};
 
 
 
