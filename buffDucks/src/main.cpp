@@ -32,8 +32,13 @@ void initialize() {
 	lcd::register_btn0_cb(onLeftButton);
 	lcd::register_btn0_cb(onCenterButton);
 
-	leftMotorGroup.set_brake_modes(E_MOTOR_BRAKE_COAST);
-	rightMotorGroup.set_brake_modes(E_MOTOR_BRAKE_COAST);
+	leftMotor1.set_brake_mode(E_MOTOR_BRAKE_COAST);
+	leftMotor2.set_brake_mode(E_MOTOR_BRAKE_COAST);
+	leftMotor3.set_brake_mode(E_MOTOR_BRAKE_COAST);
+
+	rightMotor1.set_brake_mode(E_MOTOR_BRAKE_COAST);
+	rightMotor2.set_brake_mode(E_MOTOR_BRAKE_COAST);
+	rightMotor3.set_brake_mode(E_MOTOR_BRAKE_COAST);
 }
 
 /**
