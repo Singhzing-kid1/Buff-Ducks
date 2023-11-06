@@ -11,6 +11,8 @@ Motor rightMotor1 (4, E_MOTOR_GEAR_BLUE, false, E_MOTOR_ENCODER_DEGREES);
 Motor rightMotor2 (5, E_MOTOR_GEAR_BLUE, false, E_MOTOR_ENCODER_DEGREES);
 Motor rightMotor3 (6, E_MOTOR_GEAR_BLUE, true, E_MOTOR_ENCODER_DEGREES); // We have a motor stack. This is a stacked motor and it needs to be reversed compared to the other motors
 
+Motor intakeMotor (7, E_MOTOR_GEAR_GREEN, false, E_MOTOR_ENCODER_DEGREES);
+
 Motor_Group leftMotorGroup ({leftMotor1, leftMotor2, leftMotor3});
 Motor_Group rightMotorGroup ({rightMotor1, rightMotor2, rightMotor3});
 
@@ -22,7 +24,7 @@ void rightDrive(int32_t speed){
     rightMotorGroup.move(speed);
 }
 
-int32_t accelerate(int32_t newSpeed, int32_t oldSpeed) {
+int32_t accelerate(int32_t newSpeed, int32_t oldSpeed){
     if(newSpeed == oldSpeed){
         return newSpeed;
     } else if(oldSpeed < newSpeed){

@@ -5,7 +5,7 @@ using namespace pros;
 
 driverSettings mainSettings;
 driverSettings leo;
-driverSettings driver2;
+driverSettings backUp;
 
 driverSettings initDriver(driverSettings driver, int member){
     switch(member){
@@ -13,13 +13,17 @@ driverSettings initDriver(driverSettings driver, int member){
             driver.deadZoneLimit = 27;
             driver.clampLimit = 100;
             driver.acclerationInterval = (int32_t)3;
+            driver.intakeSpeed = 127;
             return driver;
+            break;
 
         case 1:
             driver.deadZoneLimit = 27;
             driver.clampLimit = 100;
             driver.acclerationInterval = (int32_t)3;
+            driver.intakeSpeed = 127;
             return driver;
+            break;
 
 
     }
@@ -29,7 +33,7 @@ driverSettings initDriver(driverSettings driver, int member){
 int driverIndex = 0; // default to main settings
 bool nonDefaultDriver;
 
-vector<driverSettings> drivers = {mainSettings, initDriver(leo, 0), initDriver(driver2, 1)};
+vector<driverSettings> drivers = {mainSettings, initDriver(leo, 0), initDriver(backUp, 1)};
 
 
 

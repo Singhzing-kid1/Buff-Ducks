@@ -18,19 +18,19 @@ int32_t deadzone(controller_analog_e_t valueY, controller_analog_e_t valueX){
                 return (int32_t)hypot((double)master.get_analog(valueX), (double)master.get_analog(valueY));
             }
         }
-    } else {
+    } else{
         return (int32_t)0;
     }
 }
 
-int32_t clamp(int32_t analogValue) {
+int32_t clamp(int32_t analogValue){
     if(abs(analogValue) >= drivers[driverIndex].clampLimit){
         if(analogValue < 0){
             return (int32_t)-drivers[driverIndex].clampLimit;
         } else if(analogValue > 0){
             return (int32_t)drivers[driverIndex].clampLimit;
         }
-    } else {
+    } else{
         return analogValue;
     }
 }
@@ -75,10 +75,10 @@ bool tempWarningRumbler(string side, int motorNum, Motor motor, bool haveWarned)
                 }
 
             }
-        } else {
+        } else{
             return false;
         }
-    } else {
+    } else{
         return true;
     }
 

@@ -60,7 +60,7 @@
  * button press in opcontrol() for testing purposes).
  */
 #ifdef __cplusplus
-extern "C" {
+extern "C"{
 #endif
 void autonomous(void);
 void initialize(void);
