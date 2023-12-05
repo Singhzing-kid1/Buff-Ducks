@@ -84,3 +84,11 @@ bool tempWarningRumbler(string side, int motorNum, Motor motor, bool haveWarned)
 
 
 }
+
+bool closeEnough(int32_t leftInput, int32_t rightInput){
+    if (abs(leftInput - rightInput) <= 5){
+        return true;
+    } else {
+        return false;
+    }
+}

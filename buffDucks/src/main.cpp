@@ -31,14 +31,6 @@ void initialize(){
 
 	lcd::register_btn0_cb(onLeftButton);
 	lcd::register_btn0_cb(onCenterButton);
-
-	leftMotor1.set_brake_mode(E_MOTOR_BRAKE_COAST);
-	leftMotor2.set_brake_mode(E_MOTOR_BRAKE_COAST);
-	leftMotor3.set_brake_mode(E_MOTOR_BRAKE_COAST);
-
-	rightMotor1.set_brake_mode(E_MOTOR_BRAKE_COAST);
-	rightMotor2.set_brake_mode(E_MOTOR_BRAKE_COAST);
-	rightMotor3.set_brake_mode(E_MOTOR_BRAKE_COAST);
 }
 
 /**
@@ -89,6 +81,8 @@ void opcontrol(){
 
 	int32_t leftSpeed = 0;
 	int32_t rightSpeed = 0;
+	int32_t lSpeed;
+	int32_t rSpeed;
 
 	int count = 0;
 
@@ -102,18 +96,30 @@ void opcontrol(){
 
 	while (true){
 		if(master.get_analog(ANALOG_LEFT_Y) != 0){
-			leftSpeed = accelerate(clamp(deadzone(ANALOG_LEFT_Y, ANALOG_LEFT_X)), leftSpeed);
+			if(closeEnough(leftSpeed, rightSpeed)){
+				lSpeed = accelerate(clamp(deadzone(ANALOG_LEFT_Y, ANALOG_LEFT_X)), leftSpeed);
+				rightSpeed = accelerate(clamp(deadzone(ANALOG_RIGHT_Y, ANALOG_RIGHT_X)), rightSpeed);
+				leftSpeed = (lSpeed + rightSpeed)/2;
+			} else if(!closeEnough(leftSpeed, rightSpeed)){
+				leftSpeed = accelerate(clamp(deadzone(ANALOG_LEFT_Y, ANALOG_LEFT_X)), leftSpeed);
+			}
 			leftDrive(leftSpeed);
 		} else{
-			leftMotorGroup.brake();
+			leftMotorGroup.move(0);
 			leftSpeed = 0;
 		}
 
 		if(master.get_analog(ANALOG_RIGHT_Y) != 0){
-			rightSpeed = accelerate(clamp(deadzone(ANALOG_RIGHT_Y, ANALOG_RIGHT_X)), rightSpeed);
+			if(closeEnough(leftSpeed, rightSpeed)){
+				rSpeed = accelerate(clamp(deadzone(ANALOG_RIGHT_Y, ANALOG_RIGHT_X)), rightSpeed);
+				leftSpeed = accelerate(clamp(deadzone(ANALOG_LEFT_Y, ANALOG_LEFT_X)), leftSpeed);
+				rightSpeed = (rightSpeed + leftSpeed)/2;
+			} else if(!closeEnough(leftSpeed, rightSpeed)){
+				rightSpeed = accelerate(clamp(deadzone(ANALOG_RIGHT_Y, ANALOG_RIGHT_X)), rightSpeed);
+			}
 			rightDrive(rightSpeed);
 		} else{
-			rightMotorGroup.brake();
+			rightMotorGroup.move(0);
 			rightSpeed = 0;
 		}
 
@@ -131,7 +137,7 @@ void opcontrol(){
 
 		lcd::print(0, "Left Motors: | Right Motors: ");
 		lcd::print(1, "1 (port 1): %g | 1 (port 4): %g", leftMotor1.get_temperature(), rightMotor1.get_temperature());
-		lcd::print(2, "2 (port 2): %g | 2 (port 5): %g", leftMotor2.get_temperature(), rightMotor2.get_temperature());
+		lcd::print(2, "2 (port 10):%g | 2 (port 5): %g", leftMotor2.get_temperature(), rightMotor2.get_temperature());
 		lcd::print(3, "3 (port 3): %g | 3 (port 6): %g", leftMotor3.get_temperature(), rightMotor3.get_temperature());
 
 		if(!(count%25)){
