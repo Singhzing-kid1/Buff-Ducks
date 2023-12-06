@@ -81,8 +81,7 @@ void opcontrol(){
 
 	int32_t leftSpeed = 0;
 	int32_t rightSpeed = 0;
-	int32_t lSpeed;
-	int32_t rSpeed;
+	int32_t avgSpeed = 0;
 
 	int count = 0;
 
@@ -95,33 +94,28 @@ void opcontrol(){
 	bool rightMotor3TempWarning = false;
 
 	while (true){
-		if(master.get_analog(ANALOG_LEFT_Y) != 0){
-			if(closeEnough(leftSpeed, rightSpeed)){
-				lSpeed = accelerate(clamp(deadzone(ANALOG_LEFT_Y, ANALOG_LEFT_X)), leftSpeed);
-				rightSpeed = accelerate(clamp(deadzone(ANALOG_RIGHT_Y, ANALOG_RIGHT_X)), rightSpeed);
-				leftSpeed = (lSpeed + rightSpeed)/2;
-			} else if(!closeEnough(leftSpeed, rightSpeed)){
-				leftSpeed = accelerate(clamp(deadzone(ANALOG_LEFT_Y, ANALOG_LEFT_X)), leftSpeed);
+
+		leftSpeed = accelerate(deadzone(ANALOG_LEFT_Y, ANALOG_LEFT_X), leftSpeed);
+		rightSpeed = accelerate(deadzone(ANALOG_RIGHT_Y, ANALOG_RIGHT_X), rightSpeed);
+
+		if(master.get_analog(ANALOG_LEFT_Y) != 0 || master.get_analog(ANALOG_RIGHT_Y) != 0){
+			switch(closeEnough(leftSpeed, rightSpeed)){
+				case true:
+					avgSpeed = (leftSpeed + rightSpeed)/2;
+					leftDrive(avgSpeed);
+					rightDrive(avgSpeed);
+					break;
+
+				case false:
+					leftDrive(leftSpeed);
+					rightDrive(rightSpeed);
+					break;
 			}
-			leftDrive(leftSpeed);
-		} else{
+		} else {
 			leftMotorGroup.move(0);
-			leftSpeed = 0;
+			rightMotorGroup.move(0);	
 		}
 
-		if(master.get_analog(ANALOG_RIGHT_Y) != 0){
-			if(closeEnough(leftSpeed, rightSpeed)){
-				rSpeed = accelerate(clamp(deadzone(ANALOG_RIGHT_Y, ANALOG_RIGHT_X)), rightSpeed);
-				leftSpeed = accelerate(clamp(deadzone(ANALOG_LEFT_Y, ANALOG_LEFT_X)), leftSpeed);
-				rightSpeed = (rightSpeed + leftSpeed)/2;
-			} else if(!closeEnough(leftSpeed, rightSpeed)){
-				rightSpeed = accelerate(clamp(deadzone(ANALOG_RIGHT_Y, ANALOG_RIGHT_X)), rightSpeed);
-			}
-			rightDrive(rightSpeed);
-		} else{
-			rightMotorGroup.move(0);
-			rightSpeed = 0;
-		}
 
 		if(master.get_digital(DIGITAL_R1) == 1){
 			intakeMotor.move(drivers[driverIndex].intakeSpeed);
@@ -135,10 +129,11 @@ void opcontrol(){
 			intakeMotor.brake();
 		}
 
-		lcd::print(0, "Left Motors: | Right Motors: ");
-		lcd::print(1, "1 (port 1): %g | 1 (port 4): %g", leftMotor1.get_temperature(), rightMotor1.get_temperature());
-		lcd::print(2, "2 (port 10):%g | 2 (port 5): %g", leftMotor2.get_temperature(), rightMotor2.get_temperature());
-		lcd::print(3, "3 (port 3): %g | 3 (port 6): %g", leftMotor3.get_temperature(), rightMotor3.get_temperature());
+		
+		lcd::print(1, "Left Motors: | Right Motors: ");
+		lcd::print(2, "1 (port 1): %g | 1 (port 4): %g", leftMotor1.get_temperature(), rightMotor1.get_temperature());
+		lcd::print(3, "2 (port 10):%g | 2 (port 5): %g", leftMotor2.get_temperature(), rightMotor2.get_temperature());
+		lcd::print(4, "3 (port 3): %g | 3 (port 6): %g", leftMotor3.get_temperature(), rightMotor3.get_temperature());
 
 		if(!(count%25)){
 			leftMotor1TempWarning = tempWarningRumbler("left", 1, leftMotor1, leftMotor1TempWarning);
