@@ -28,9 +28,6 @@ void initialize(){
 	lcd::initialize();
 	lcd::set_background_color(0, 0, 0);
 	lcd::set_text_color(255, 255, 255);
-
-	lcd::register_btn0_cb(onLeftButton);
-	lcd::register_btn0_cb(onCenterButton);
 }
 
 /**
@@ -79,63 +76,72 @@ void autonomous(){}
  */
 void opcontrol(){
 
-	int32_t leftSpeed = 0;
-	int32_t rightSpeed = 0;
-	int32_t avgSpeed = 0;
-
-	int count = 0;
-
-	bool leftMotor1TempWarning = false;
-	bool leftMotor2TempWarning = false;
-	bool leftMotor3TempWarning = false;
-
-	bool rightMotor1TempWarning = false;
-	bool rightMotor2TempWarning = false;
-	bool rightMotor3TempWarning = false;
+	int32_t leftSpeed = 0;                    // 
+	int32_t rightSpeed = 0;                   //  
+	int32_t avgSpeed = 0;                     //
+                                              //
+	int count = 0;                            //   
+                                              //
+	bool leftMotor1TempWarning = false;       // define some opControl variables.
+	bool leftMotor2TempWarning = false;       //
+	bool leftMotor3TempWarning = false;       //
+                                              //
+	bool rightMotor1TempWarning = false;      //
+	bool rightMotor2TempWarning = false;      //
+	bool rightMotor3TempWarning = false;      //
 
 	while (true){
 
-		leftSpeed = accelerate(deadzone(ANALOG_LEFT_Y, ANALOG_LEFT_X), leftSpeed);
-		rightSpeed = accelerate(deadzone(ANALOG_RIGHT_Y, ANALOG_RIGHT_X), rightSpeed);
+		lcd::register_btn0_cb(onLeftButton);    // toggles to change driver profile after code has started. FOR TESTING PURPOSES ONLY.
+		lcd::register_btn0_cb(onCenterButton);  // 
 
-		if(master.get_analog(ANALOG_LEFT_Y) != 0 || master.get_analog(ANALOG_RIGHT_Y) != 0){
-			switch(closeEnough(leftSpeed, rightSpeed)){
-				case true:
-					avgSpeed = (leftSpeed + rightSpeed)/2;
-					leftDrive(avgSpeed);
-					rightDrive(avgSpeed);
+		leftSpeed = accelerate(deadzone(ANALOG_LEFT_Y, ANALOG_LEFT_X), leftSpeed);       // get analog stick inputs and run them through functions to get left/right speed values.
+		rightSpeed = accelerate(deadzone(ANALOG_RIGHT_Y, ANALOG_RIGHT_X), rightSpeed);   //
+
+		if(master.get_analog(ANALOG_LEFT_Y) != 0 || master.get_analog(ANALOG_RIGHT_Y) != 0){ // check if any of the analog sticks are moving in the y axis.
+			switch(closeEnough(leftSpeed, rightSpeed)){ // check if the leftSpeed and rightSpeed are within 5 of each other.
+				case true: // if true then
+					avgSpeed = (leftSpeed + rightSpeed)/2; // avg left and right speeds together.
+					leftDrive(avgSpeed);  // apply the avgSpeed to both the left motor group and right motor group.
+					rightDrive(avgSpeed); //
 					break;
 
-				case false:
-					leftDrive(leftSpeed);
-					rightDrive(rightSpeed);
+				case false: // if false then
+					leftDrive(leftSpeed);   // set the leftSpeed to the left motor group and the rightSpeed to the right motor gorup.
+					rightDrive(rightSpeed); //
 					break;
 			}
-		} else {
-			leftMotorGroup.move(0);
-			rightMotorGroup.move(0);	
+		} else { // if none of the sticks are moving then
+			leftMotorGroup.move(0);   // set the input voltages to zero because for some reason setting the motor brake mode to coast does not work. this is the same as setting the 
+			rightMotorGroup.move(0);  // brake mode to coast.
 		}
 
 
-		if(master.get_digital(DIGITAL_R1) == 1){
-			intakeMotor.move(drivers[driverIndex].intakeSpeed);
+		if(master.get_digital(DIGITAL_R1) == 1){                   // triball intake stuff. self explanitory.
+			intakeMotor.move(drivers[driverIndex].intakeSpeed);    
 		} else{
 			intakeMotor.brake();
 		}
 
-		if(master.get_digital(DIGITAL_R2) == 1){
-			intakeMotor.move(-drivers[driverIndex].intakeSpeed);
-		} else{
-			intakeMotor.brake();
+		switch(driverIndex){ // communicates the active driver profile 
+			case 0:
+				lcd::print(0, "Default Driver Settings");
+				break;
+			case 1:
+				lcd::print(0, "Leo's Settings");
+				break;
+			case 2:
+				lcd::print(0, "Backup Driver's Settings");
+				break;
 		}
 
-		
+		// shows the current motor temps so we can tell if they are overheating
 		lcd::print(1, "Left Motors: | Right Motors: ");
 		lcd::print(2, "1 (port 1): %g | 1 (port 4): %g", leftMotor1.get_temperature(), rightMotor1.get_temperature());
 		lcd::print(3, "2 (port 10):%g | 2 (port 5): %g", leftMotor2.get_temperature(), rightMotor2.get_temperature());
 		lcd::print(4, "3 (port 3): %g | 3 (port 6): %g", leftMotor3.get_temperature(), rightMotor3.get_temperature());
 
-		if(!(count%25)){
+		if(!(count%25)){ // rumbles the comtrollers in a specific pattern to communicate which motor is overheating during competition.
 			leftMotor1TempWarning = tempWarningRumbler("left", 1, leftMotor1, leftMotor1TempWarning);
 			leftMotor2TempWarning = tempWarningRumbler("left", 2, leftMotor2, leftMotor2TempWarning);
 			leftMotor3TempWarning = tempWarningRumbler("left", 3, leftMotor3, leftMotor3TempWarning);
