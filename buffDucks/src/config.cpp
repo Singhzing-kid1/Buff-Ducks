@@ -6,7 +6,7 @@ using namespace pros;
 driverSettings mainSettings;
 driverSettings leo;
 driverSettings aaron;
-driverSettings faggot;
+driverSettings lise;
 
 driverSettings initDriver(driverSettings driver, int member){
     switch(member){
@@ -42,7 +42,7 @@ driverSettings initDriver(driverSettings driver, int member){
 int driverIndex = 0; // default to main settings
 bool nonDefaultDriver;
 
-vector<driverSettings> drivers = {mainSettings, initDriver(leo, 0), initDriver(aaron, 1), initDriver(faggot, 2)};
+vector<driverSettings> drivers = {mainSettings, initDriver(leo, 0), initDriver(aaron, 1), initDriver(lise, 2)};
 
 
 
