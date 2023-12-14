@@ -40,7 +40,7 @@ double pidMove(double target, int speed){
         current = 10; // make this so that it uses the motor encoder values.
 
         err = error(target, current);
-        integral = integrate(err, (double)count);
+        integral += integrate(err, (double)count);
         derivative = derivate(err, lastErr, (double)count);
 
         output = pid(err, integral, derivative, kP, kI, kD);
