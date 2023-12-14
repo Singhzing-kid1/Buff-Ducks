@@ -18,6 +18,11 @@ void onCenterButton(){
 	driverIndex = 2;
 }
 
+void onRightButton(){
+	nonDefaultDriver = true;
+	driverIndex = 3;
+}
+
 /**
  * Runs initialization code. This occurs as soon as the program is started.
  *
@@ -92,8 +97,8 @@ void opcontrol(){
 
 	while (true){
 
-		lcd::register_btn0_cb(onLeftButton);    // toggles to change driver profile after code has started. FOR TESTING PURPOSES ONLY.
-		lcd::register_btn0_cb(onCenterButton);  // 
+		lcd::register_btn0_cb(onLeftButton);    // toggles to change driver profile after code has started.
+		lcd::register_btn1_cb(onCenterButton);  // 
 
 		leftSpeed = accelerate(deadzone(ANALOG_LEFT_Y, ANALOG_LEFT_X), leftSpeed);       // get analog stick inputs and run them through functions to get left/right speed values.
 		rightSpeed = accelerate(deadzone(ANALOG_RIGHT_Y, ANALOG_RIGHT_X), rightSpeed);   //
@@ -117,9 +122,11 @@ void opcontrol(){
 		}
 
 
-		if(master.get_digital(DIGITAL_R1) == 1){                   // triball intake stuff. self explanitory.
-			intakeMotor.move(drivers[driverIndex].intakeSpeed);    
-		} else{
+		if (master.get_digital(DIGITAL_R2) == 1 && master.get_digital(DIGITAL_L2) != 1){
+			intakeMotor.move(-drivers[driverIndex].intakeSpeed);
+		} else if (master.get_digital(DIGITAL_L2) == 1 && master.get_digital(DIGITAL_R2) != 1){
+			intakeMotor.move(drivers[driverIndex].intakeSpeed);
+		} else {
 			intakeMotor.brake();
 		}
 
@@ -131,7 +138,10 @@ void opcontrol(){
 				lcd::print(0, "Leo's Settings");
 				break;
 			case 2:
-				lcd::print(0, "Backup Driver's Settings");
+				lcd::print(0, "Aaron's Settings");
+				break;
+			case 3:
+				lcd::print(0, "Max's Settings");
 				break;
 		}
 
