@@ -1,5 +1,3 @@
-#define _USE_MATH_DEFINES
-
 #include "main.h"
 
 using namespace std;
@@ -22,7 +20,7 @@ double pid(double error, double integration, double derivation, double proportio
 }
 
 double currentDistance(){
-    return ((rightMotor3.get_position()/360)*(6/10)) * 2 * M_PI * 0.041275;
+    return ((rightMotor3.get_position()/360)*(6/10)) * 2 * pi * 0.041275;
 }
 
 void pidMove(double target, int speed){

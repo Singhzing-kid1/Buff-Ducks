@@ -79,6 +79,7 @@ void opcontrol(void);
 #include "motors.hpp"
 #include "config.hpp"
 #include "auton.hpp"
+#include "pi.hpp"
 //#include <iostream>
 #endif
 
