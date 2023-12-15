@@ -1,3 +1,5 @@
+#define _USE_MATH_DEFINES
+
 #include "main.h"
 
 using namespace std;
@@ -19,7 +21,11 @@ double pid(double error, double integration, double derivation, double proportio
     return (proportionalGain * error) + (integralGain * integration) + (derivativeGain * derivation); 
 }
 
-double pidMove(double target, int speed){
+double currentDistance(){
+    return ((rightMotor3.get_position()/360)*(6/10)) * 2 * M_PI * 0.041275;
+}
+
+void pidMove(double target, int speed){
     bool isAtTarget = false;
 
     int count = 0;
@@ -36,8 +42,14 @@ double pidMove(double target, int speed){
     const double kI = 0.01;
     const double kD = 0.05;
 
+    rightMotor3.set_encoder_units(E_MOTOR_ENCODER_DEGREES);
+    rightMotor3.tare_position();
+
     while(!isAtTarget){
-        current = 10; // make this so that it uses the motor encoder values.
+        current = currentDistance();
+        
+        cout << "current: " << current << endl;
+        cout << "at target? " << isAtTarget << endl; // make this so that it uses the motor encoder values.
 
         err = error(target, current);
         integral += integrate(err, (double)count);
@@ -57,4 +69,7 @@ double pidMove(double target, int speed){
         count++;
         delay(2);
     }
+
+    leftMotorGroup.brake();
+    rightMotorGroup.brake();
 }

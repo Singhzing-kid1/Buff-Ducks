@@ -64,7 +64,9 @@ void competition_initialize(){}
  * will be stopped. Re-enabling the robot will restart the task, not re-start it
  * from where it left off.
  */
-void autonomous(){}
+void autonomous(){
+	pidMove(0.10, 2);
+}
 
 /**
  * Runs the operator control code. This function will be started in its own task
@@ -125,7 +127,7 @@ void opcontrol(){
 		if (master.get_digital(DIGITAL_R2) == 1 && master.get_digital(DIGITAL_L2) != 1){
 			intakeMotor.move(-drivers[driverIndex].intakeSpeed);
 		} else if (master.get_digital(DIGITAL_L2) == 1 && master.get_digital(DIGITAL_R2) != 1){
-			intakeMotor.move(drivers[driverIndex].intakeSpeed);
+			pidMove(0.1, 2);
 		} else {
 			intakeMotor.brake();
 		}
