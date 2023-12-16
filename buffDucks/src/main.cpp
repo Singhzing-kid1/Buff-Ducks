@@ -97,8 +97,9 @@ void opcontrol(){
 
 	while (true){
 
-		lcd::register_btn0_cb(onLeftButton);    // toggles to change driver profile after code has started.
-		lcd::register_btn1_cb(onCenterButton);  // 
+		lcd::register_btn0_cb(onLeftButton);    // 
+		lcd::register_btn1_cb(onCenterButton);  // toggles to change driver profile after code has started.
+		lcd::register_btn2_cb(onRightButton);   // 
 
 		leftSpeed = accelerate(deadzone(ANALOG_LEFT_Y, ANALOG_LEFT_X), leftSpeed);       // get analog stick inputs and run them through functions to get left/right speed values.
 		rightSpeed = accelerate(deadzone(ANALOG_RIGHT_Y, ANALOG_RIGHT_X), rightSpeed);   //
