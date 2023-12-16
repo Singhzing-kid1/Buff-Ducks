@@ -2,4 +2,4 @@
 
 using namespace std;
 
-float pi;
+extern float pi;
