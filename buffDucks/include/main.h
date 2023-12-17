@@ -75,11 +75,6 @@ void opcontrol(void);
 /**
  * You can add C++-only headers here
  */
-#include "controllers.hpp"
-#include "motors.hpp"
-#include "config.hpp"
-#include "auton.hpp"
-#include "pi.hpp"
 //#include <iostream>
 #endif
 
