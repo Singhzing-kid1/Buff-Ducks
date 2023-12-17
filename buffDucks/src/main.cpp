@@ -40,7 +40,11 @@ void initialize(){
  * the VEX Competition Switch, following either autonomous or opcontrol. When
  * the robot is enabled, this task will exit.
  */
-void disabled(){}
+void disabled(){
+	lcd::register_btn0_cb(onLeftButton);    // 
+	lcd::register_btn1_cb(onCenterButton);  // toggles to change driver profile after code has started.
+	lcd::register_btn2_cb(onRightButton);   // 
+}
 
 /**
  * Runs after initialize(), and before autonomous when connected to the Field
@@ -129,6 +133,15 @@ void opcontrol(){
 			intakeMotor.move(drivers[driverIndex].intakeSpeed);
 		} else {
 			intakeMotor.brake();
+		}
+
+
+		if (master.get_digital(DIGITAL_X) == 1 && master.get_digital(DIGITAL_B) != 1){
+			blockerMotor.move(drivers[driverIndex].intakeSpeed);
+		} else if (master.get_digital(DIGITAL_B) == 1 && master.get_digital(DIGITAL_X) != 1){
+			blockerMotor.move(-drivers[driverIndex].intakeSpeed);
+		} else {
+			blockerMotor.brake();
 		}
 
 		switch(driverIndex){ // communicates the active driver profile 

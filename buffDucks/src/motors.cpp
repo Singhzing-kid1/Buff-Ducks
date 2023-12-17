@@ -13,6 +13,8 @@ Motor rightMotor3 (6, E_MOTOR_GEAR_BLUE, true, E_MOTOR_ENCODER_DEGREES); // We h
 
 Motor intakeMotor (7, E_MOTOR_GEAR_GREEN, false, E_MOTOR_ENCODER_DEGREES);
 
+Motor blockerMotor(19, E_MOTOR_GEAR_RED, false, E_MOTOR_ENCODER_DEGREES);
+
 Motor_Group leftMotorGroup ({leftMotor1, leftMotor2, leftMotor3});
 Motor_Group rightMotorGroup ({rightMotor1, rightMotor2, rightMotor3});
 

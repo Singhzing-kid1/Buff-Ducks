@@ -11,6 +11,8 @@ extern Motor rightMotor3;
 
 extern Motor intakeMotor;
 
+extern Motor blockerMotor;
+
 extern Motor_Group leftMotorGroup;
 extern Motor_Group rightMotorGroup;
 
