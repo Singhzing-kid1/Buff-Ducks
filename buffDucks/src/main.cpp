@@ -1,4 +1,5 @@
 #include "main.h"
+#include "lemlib/api.hpp"
 
 using namespace std;
 using namespace pros;
