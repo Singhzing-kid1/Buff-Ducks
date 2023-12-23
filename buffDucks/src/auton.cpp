@@ -12,8 +12,8 @@ Drivetrain_t tanktrain{
     360 // wheel rpm
 };
 
-TrackingWheel leftTrackingWheel(&leftMotorGroup, 3.25, -6.375, 360);
-TrackingWheel rightTrackingWheel(&rightMotorGroup, 3.25, 6.375, 360);
+TrackingWheel leftTrackingWheel (&leftMotorGroup, 3.25, -6.375, 360);
+TrackingWheel rightTrackingWheel (&rightMotorGroup, 3.25, 6.375, 360);
 
 OdomSensors_t sensors{
     &leftTrackingWheel,
@@ -43,4 +43,4 @@ ChassisController_t angularController{
     40 // slew rate
 };
 
-Chassis wheelThingyWithTracking(tanktrain, lateralController, angularController, sensors);
+Chassis wheelThingyWithTracking (tanktrain, lateralController, angularController, sensors);
