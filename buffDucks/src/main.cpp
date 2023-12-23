@@ -1,5 +1,4 @@
 #include "main.h"
-#include "lemlib/api.hpp"
 
 using namespace std;
 using namespace pros;
@@ -21,6 +20,7 @@ void initialize(){
 	rightMotorGroup.set_gearing(MOTOR_GEAR_BLUE);
 	leftMotorGroup.set_brake_modes(MOTOR_BRAKE_COAST);
 	rightMotorGroup.set_brake_modes(MOTOR_BRAKE_COAST);
+	wheelThingyWithTracking.calibrate();
 }
 
 /**

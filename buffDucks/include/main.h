@@ -78,6 +78,7 @@ void opcontrol(void);
 #include "auton.hpp"
 #include "controller.hpp"
 #include "motors.hpp"
+#include "lemlib/api.hpp"
 //#include <iostream>
 #endif
 
