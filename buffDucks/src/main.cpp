@@ -16,12 +16,16 @@ using namespace pros;
  * All other competition modes are blocked by initialize; it is recommended
  * to keep execution time for this mode under a few seconds.
  */
+<<<<<<< HEAD
 void initialize(){
 	leftMotorGroup.set_gearing(MOTOR_GEAR_BLUE);
 	rightMotorGroup.set_gearing(MOTOR_GEAR_BLUE);
 	leftMotorGroup.set_brake_modes(MOTOR_BRAKE_COAST);
 	rightMotorGroup.set_brake_modes(MOTOR_BRAKE_COAST);
 }
+=======
+void initialize(){}
+>>>>>>> parent of 0a7fd0b (optimized(maybe) drive train code)
 
 /**
  * Runs while the robot is in the disabled state of Field Management System or
@@ -68,32 +72,5 @@ void autonomous(){}
  * task, not resume it from where it left off.
  */
 void opcontrol(){
-
-	int32_t leftSpeed = 0;
-	int32_t rightSpeed = 0;
-	int32_t avgSpeed = 0;
-
-	while (true){
-		leftSpeed = accelerate(deadzone(ANALOG_LEFT_X, ANALOG_LEFT_Y), leftSpeed);
-		rightSpeed = accelerate(deadzone(ANALOG_RIGHT_X, ANALOG_RIGHT_Y), rightSpeed);
-
-		if(master.get_analog(ANALOG_LEFT_Y) != 0 || master.get_analog(ANALOG_RIGHT_Y) != 0){
-			switch (closeEnough(rightSpeed, leftSpeed)){
-				case true:
-					avgSpeed = (leftSpeed + rightSpeed)/2;
-					rightMotorGroup = avgSpeed;
-					leftMotorGroup = avgSpeed;
-					break;
-				case false:
-					rightMotorGroup = rightSpeed;
-					leftMotorGroup = leftSpeed;
-					break;
-			}
-		} else {
-			rightMotorGroup.brake();
-			leftMotorGroup.brake();
-		}
-
-		delay(2);
-	}
+	while (true){}
 }
