@@ -75,9 +75,11 @@ void opcontrol(void);
 /**
  * You can add C++-only headers here
  */
+#include "lemlib/api.hpp"
 #include "auton.hpp"
 #include "controller.hpp"
 #include "motors.hpp"
+#include "logger.hpp"
 //#include <iostream>
 #endif
 
