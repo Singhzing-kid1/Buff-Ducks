@@ -79,9 +79,12 @@ void opcontrol(void);
 #include "auton.hpp"
 #include "controller.hpp"
 #include "motors.hpp"
+<<<<<<< HEAD
 #include "lemlib/api.hpp"
 =======
 >>>>>>> parent of 0a7fd0b (optimized(maybe) drive train code)
+=======
+>>>>>>> parent of a774231 (maybe auton?)
 //#include <iostream>
 #endif
 
