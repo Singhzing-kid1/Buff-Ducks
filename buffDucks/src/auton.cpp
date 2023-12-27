@@ -1,3 +1,4 @@
+<<<<<<< HEAD
 #include "main.h"
 
 using namespace std;
@@ -44,3 +45,5 @@ ChassisController_t angularController{
 };
 
 Chassis wheelThingyWithTracking (tanktrain, lateralController, angularController, sensors);
+=======
+>>>>>>> parent of a774231 (maybe auton?)
