@@ -75,10 +75,13 @@ void opcontrol(void);
 /**
  * You can add C++-only headers here
  */
+<<<<<<< HEAD
 #include "auton.hpp"
 #include "controller.hpp"
 #include "motors.hpp"
 #include "lemlib/api.hpp"
+=======
+>>>>>>> parent of 0a7fd0b (optimized(maybe) drive train code)
 //#include <iostream>
 #endif
 
