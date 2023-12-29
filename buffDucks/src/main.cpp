@@ -2,6 +2,8 @@
 
 using namespace std;
 using namespace pros;
+using namespace vLoggger;
+using namespace vLogHelpers;
 /**
  * A callback function for LLEMU's center button.
  *

@@ -30,6 +30,10 @@
 #include <iostream>
 #include <list>
 #include <vector>
+#include <sstream>
+#include <fstream>
+#include <random>
+#include <String>
 #else /* (not) __cplusplus */
 #include <errno.h>
 #include <math.h>
