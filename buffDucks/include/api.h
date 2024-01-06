@@ -33,7 +33,7 @@
 #include <sstream>
 #include <fstream>
 #include <random>
-#include <String>
+#include <string>
 #else /* (not) __cplusplus */
 #include <errno.h>
 #include <math.h>

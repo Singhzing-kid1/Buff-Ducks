@@ -22,6 +22,7 @@ void initialize(){
 	rightMotorGroup.set_gearing(MOTOR_GEAR_BLUE);
 	leftMotorGroup.set_brake_modes(MOTOR_BRAKE_COAST);
 	rightMotorGroup.set_brake_modes(MOTOR_BRAKE_COAST);
+	initializeLogging();
 }
 
 /**
@@ -40,7 +41,13 @@ void disabled(){}
  * This task will exit when the robot is enabled and autonomous or opcontrol
  * starts.
  */
-void competition_initialize(){}
+void competition_initialize(){
+	leftMotorGroup.set_gearing(MOTOR_GEAR_BLUE);
+	rightMotorGroup.set_gearing(MOTOR_GEAR_BLUE);
+	leftMotorGroup.set_brake_modes(MOTOR_BRAKE_COAST);
+	rightMotorGroup.set_brake_modes(MOTOR_BRAKE_COAST);
+	initializeLogging();
+}
 
 /**
  * Runs the user autonomous code. This function will be started in its own task

@@ -15,7 +15,7 @@ namespace vLogger{
 
         int fatalVal = 1;
 
-        if(any_of(areLeftTempsOver.begin(), areLeftTempsOver.end(), [fatalVal](int i){return i == fatalVal;}) || any_of(areRightTempsOver.begin(), areRightTempsOver.end(), [fatalVal](int i){return i == fatalVal;}) || any_of(areLeftTempsOver.begin(), areLeftTempsOver.end(), [](int i){return i == ENODEV;}) || any_of(areRightTempsOver.begin(), areRightTempsOver.end(), [](int i){ return i == ENODEV;}) || battery::get_capacity() <= 10 || controller.is_connected() ==0){
+        if(any_of(areLeftTempsOver.begin(), areLeftTempsOver.end(), [fatalVal](int i){return i == fatalVal;}) || any_of(areRightTempsOver.begin(), areRightTempsOver.end(), [fatalVal](int i){return i == fatalVal;}) || any_of(areLeftTempsOver.begin(), areLeftTempsOver.end(), [](int i){return i == ENODEV;}) || any_of(areRightTempsOver.begin(), areRightTempsOver.end(), [](int i){ return i == ENODEV;}) || getBatteryPercent(battery::get_capacity()) <= 10 || controller.is_connected() ==0){
             return level::FATAL;
         }
 
@@ -28,7 +28,7 @@ namespace vLogger{
         int minErrBat = 11;
         int maxErrBat = 25;
 
-        if(any_of(currentLeftTemps.begin(), currentLeftTemps.end(), [minErrTemp](int i){return i >= minErrTemp;}) || any_of(currentRightTemps.begin(), currentRightTemps.end(), [minErrTemp](int i){return i >= minErrTemp;}) || isInRange(battery::get_capacity(), minErrBat, maxErrBat)){
+        if(any_of(currentLeftTemps.begin(), currentLeftTemps.end(), [minErrTemp](int i){return i >= minErrTemp;}) || any_of(currentRightTemps.begin(), currentRightTemps.end(), [minErrTemp](int i){return i >= minErrTemp;}) || isInRange(getBatteryPercent(battery::get_capacity()), minErrBat, maxErrBat)){
             return level::ERROR;
         }
 
@@ -39,7 +39,7 @@ namespace vLogger{
         int minWarnBat = 25;
         int maxWarnBat = 50;
 
-        if(any_of(currentLeftTemps.begin(), currentLeftTemps.end(), [minWarnTemp, maxWarnTemp](int i){return isInRange(i, minWarnTemp, maxWarnTemp);}) || any_of(currentRightTemps.begin(), currentRightTemps.end(), [minWarnTemp, maxWarnTemp](int i){return isInRange(i, minWarnTemp, maxWarnTemp);}) || isInRange(battery::get_capacity(), minWarnBat, maxWarnBat)){
+        if(any_of(currentLeftTemps.begin(), currentLeftTemps.end(), [minWarnTemp, maxWarnTemp](int i){return isInRange(i, minWarnTemp, maxWarnTemp);}) || any_of(currentRightTemps.begin(), currentRightTemps.end(), [minWarnTemp, maxWarnTemp](int i){return isInRange(i, minWarnTemp, maxWarnTemp);}) || isInRange(getBatteryPercent(battery::get_capacity()), minWarnBat, maxWarnBat)){
             return level::WARN;
         }
 
@@ -58,7 +58,7 @@ namespace vLogger{
         motorEncoders << rightMotors[0].get_position() << ", " << rightMotors[1].get_position() << ", " << rightMotors[2].get_position() << ", " << leftMotors[0].get_position() << ", " << leftMotors[1].get_position() << ", " << leftMotors[2].get_position() << ", ";
         analogIns << controller.get_analog(ANALOG_LEFT_Y) << ", " << controller.get_analog(ANALOG_LEFT_X) << ", " << controller.get_analog(ANALOG_RIGHT_Y) << ", " << controller.get_analog(ANALOG_RIGHT_X) << ", ";
         digitalIns << controller.get_digital(DIGITAL_L1) << ", " << controller.get_digital(DIGITAL_L2) << ", " << controller.get_digital(DIGITAL_R1) << ", " << controller.get_digital(DIGITAL_R2) << ", ";
-        batteries << controller.get_battery_level() << ", " << battery::get_capacity() << endl;
+        batteries << controller.get_battery_level() << ", " << getBatteryPercent(battery::get_capacity()) << endl;
 
         dataStream << time << ", " << motorTemps.str() << motorEncoders.str() << analogIns.str() << digitalIns.str() << batteries.str();
 
@@ -132,5 +132,12 @@ namespace vLogHelpers{
         logName += ".log";
 
         return logName;
+    }
+
+    double getBatteryPercent(double voltage){
+        double minVoltage = 10.0;
+        double maxVoltage = 14.6;
+
+        return (voltage - minVoltage) / (maxVoltage - minVoltage) * 100.0;
     }
 }

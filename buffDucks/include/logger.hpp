@@ -97,4 +97,16 @@ namespace vLogHelpers{
      * @note then it is appended by .log
     */
     string uniqueLogName(controlMode, size_t);
+
+    /**
+     * @brief gets the vex v5 brain battery percentage at a certain voltage
+     * 
+     * @param voltage the voltage of the battery
+     * 
+     * @note uses the formula (voltage - minVoltage) / (maxVoltage - minVoltage) * 100
+     * 
+     * @return a percentage
+     * 
+    */
+    double getBatteryPercent(double);
 }
