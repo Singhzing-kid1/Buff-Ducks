@@ -71,13 +71,13 @@ void opcontrol() {
 		rightSpeed = accelerate(deadzone(ANALOG_RIGHT_X, ANALOG_RIGHT_Y), rightSpeed);
 		leftSpeed = accelerate(deadzone(ANALOG_LEFT_X, ANALOG_LEFT_Y), leftSpeed);
 
-		if(master.get_analog(ANALOG_RIGHT_Y) != 0 || master.get_analog(ANALOG_LEFT_Y)){
+		if(master.get_analog(ANALOG_RIGHT_Y) != 0 || master.get_analog(ANALOG_LEFT_Y) != 0){
 			switch(closeEnough(leftSpeed, rightSpeed)){
 				case true:
 					avgSpeed = (leftSpeed + rightSpeed)/2;
 					cout << "moving straight @ " << avgSpeed << endl;
 					break;
-					
+
 				case false:
 					cout << "Left Speed: " << leftSpeed << ", Right Speed: " << rightSpeed << endl;
 					break;
