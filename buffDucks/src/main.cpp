@@ -2,6 +2,8 @@
 
 using namespace std;
 using namespace pros;
+using namespace duckTrace;
+using namespace duckTraceHelper;
 
 /**
  * Runs initialization code. This occurs as soon as the program is started.
@@ -9,15 +11,19 @@ using namespace pros;
  * All other competition modes are blocked by initialize; it is recommended
  * to keep execution time for this mode under a few seconds.
  */
-void initialize() {}
+void initialize() {
+	leftMotorGroup.set_gearing(E_MOTOR_GEAR_BLUE);
+	rightMotorGroup.set_gearing(E_MOTOR_GEAR_BLUE);
+	leftMotorGroup.set_brake_modes(E_MOTOR_BRAKE_COAST);
+	rightMotorGroup.set_brake_modes(E_MOTOR_BRAKE_COAST);
+	ruleFile = initializeLogging();
+}
 
 /**
  * Runs while the robot is in the disabled state of Field Management System or
  * the VEX Competition Switch, following either autonomous or opcontrol. When
  * the robot is enabled, this task
-Sentry is attempting to send 1 pending events
-Waiting up to 2 seconds
-Press Ctrl-C to quit will exit.
+ *
  */
 void disabled() {}
 
@@ -33,9 +39,7 @@ void disabled() {}
 void competition_initialize() {}
 
 /**
-Sentry is attempting to send 1 pending events
-Waiting up to 2 seconds
-Press Ctrl-C to quit
+
  * Runs the user autonomous code. This function will be started in its own task
  * with the default priority and stack size whenever the robot is enabled via
  * the Field Management System or the VEX Competition Switch in the autonomous
@@ -45,6 +49,14 @@ Press Ctrl-C to quit
  * If the robot is disabled or communications is lost, the autonomous task
  * will be stopped. Re-enabling the robot will restart the task, not re-start it
  * from where it left off.
+
+/**
+ * Runs the user autonomous code. This function will be started in its own task
+ * with the default priority and stack size whenever the robot is enabled via
+ * the Field Management System or the VEX Competition Switch in the autonomous
+ * mode. Alternatively, this function may be called in initialize or opcontrol
+ * for non-competition testing purposes.
+ *
  */
 void autonomous() {}
 
@@ -67,6 +79,10 @@ void opcontrol() {
 	int32_t rightSpeed = 0;
 	int32_t avgSpeed = 0;
 
+	fstream operatorLogFile = createLogFile(uniqueLogName(controlMode::OPERATOR, &ruleFile));
+
+	uint32_t startTime = millis();
+
 	while (true) {
 		rightSpeed = accelerate(deadzone(ANALOG_RIGHT_X, ANALOG_RIGHT_Y), rightSpeed);
 		leftSpeed = accelerate(deadzone(ANALOG_LEFT_X, ANALOG_LEFT_Y), leftSpeed);
@@ -75,16 +91,28 @@ void opcontrol() {
 			switch(closeEnough(leftSpeed, rightSpeed)){
 				case true:
 					avgSpeed = (leftSpeed + rightSpeed)/2;
-					cout << "moving straight @ " << avgSpeed << endl;
+					leftMotorGroup = avgSpeed;
+					rightMotorGroup = avgSpeed;
 					break;
 
 				case false:
-					cout << "Left Speed: " << leftSpeed << ", Right Speed: " << rightSpeed << endl;
+					leftMotorGroup = leftSpeed;
+					rightMotorGroup = rightSpeed;
 					break;
 			}
 		} else {
-			cout << "not moving" << endl;
+			leftMotorGroup.brake();
+			rightMotorGroup.brake();
 		}
+
+		if(master.get_digital(DIGITAL_Y) != 0){ // current solution to get the log to save
+			closeAndUpdateRuleFile(&ruleFile); // used to call break; but this allows us to keep driving after saving the log.
+			operatorLogFile.close();
+		}
+
+		level logLevel = determineLevel({leftMotorGroup[0], leftMotorGroup[1], leftMotorGroup[2]}, {rightMotorGroup[0], rightMotorGroup[1], rightMotorGroup[2]}, master);
+		ostringstream payload = formulateDataString({leftMotorGroup[0], leftMotorGroup[1], leftMotorGroup[2]}, {rightMotorGroup[0], rightMotorGroup[1], rightMotorGroup[2]}, master, millis() - startTime);
+		writeLine(&operatorLogFile, &payload, logLevel);
 
 		pros::delay(20);
 	}

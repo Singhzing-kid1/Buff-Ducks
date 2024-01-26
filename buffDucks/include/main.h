@@ -77,8 +77,17 @@ void opcontrol(void);
  */
 #include <iostream>
 #include <cmath>
+#include <ctime>
+#include <vector>
+#include <sstream>
+#include <fstream>
+#include <random>
+#include <string>
+#include <algorithm>
+#include "lemlib/api.hpp"
 #include "controller.hpp"
 #include "motors.hpp"
+#include "duckTrace.hpp"
 #endif
 
 #endif  // _PROS_MAIN_H_
