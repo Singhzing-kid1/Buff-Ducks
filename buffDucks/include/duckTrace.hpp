@@ -6,15 +6,11 @@ using namespace pros;
 #pragma once
 
 namespace duckTrace{
-    enum class level{FATAL, ERROR, WARN, INFO};
-
-    level determineLevel(vector<Motor>, vector<Motor>, Controller);
-
     ostringstream formulateDataString(vector<Motor>, vector<Motor>, Controller, uint32_t);
 
     fstream createLogFile(string);
 
-    void writeLine(fstream*, ostringstream*, level);
+    void writeLine(fstream*, ostringstream*);
 }
 
 namespace duckTraceHelper{
@@ -30,5 +26,5 @@ namespace duckTraceHelper{
 
     void closeAndUpdateRuleFile(fstream*);
 
-    string uniqueLogName(controlMode, fstream*);
+    string uniqueLogName(fstream*, controlMode);
 }

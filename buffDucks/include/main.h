@@ -85,6 +85,7 @@ void opcontrol(void);
 #include <string>
 #include <algorithm>
 #include "lemlib/api.hpp"
+#include "auton.hpp"
 #include "controller.hpp"
 #include "motors.hpp"
 #include "duckTrace.hpp"

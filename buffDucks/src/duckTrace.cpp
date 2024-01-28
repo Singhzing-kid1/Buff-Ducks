@@ -6,62 +6,6 @@ using namespace duckTrace;
 using namespace duckTraceHelper;
 
 namespace duckTrace{
-    level determineLevel(vector<Motor> leftMotors, vector<Motor> rightMotors, Controller controller){
-        // FATAL CLAUSE
-
-        vector<int32_t> areLeftTempsOver;
-        vector<int32_t> areRightTempsOver;
-
-        int32_t fatalVal = 1;
-
-        for(const auto& obj : leftMotors){
-            areLeftTempsOver.push_back(obj.is_over_temp());
-        }
-
-        for(const auto& obj : rightMotors){
-            areLeftTempsOver.push_back(obj.is_over_temp());
-        }
-
-        if(any_of(areLeftTempsOver.begin(), areLeftTempsOver.end(), [fatalVal](int32_t x){return x == fatalVal;}) || any_of(areRightTempsOver.begin(), areRightTempsOver.end(), [fatalVal](int32_t x){return x == fatalVal;}) || any_of(areLeftTempsOver.begin(), areLeftTempsOver.end(), [](int x){return x == ENODEV;}) || any_of(areRightTempsOver.begin(), areRightTempsOver.end(), [](int x){return x == ENODEV;}) || getBatteryPercent(battery::get_capacity()) <= 10 || controller.is_connected() == 0){
-            return level::FATAL;
-        }
-
-        //ERROR CLAUSE
-
-        vector<double> leftTemps;
-        vector<double> rightTemps;
-
-        int minErrTemp = 50;
-        int minErrBat = 10;
-        int maxErrBat = 25;
-
-        for(const auto& obj : leftMotors){
-            leftTemps.push_back(obj.get_temperature());
-        }
-
-        for(const auto& obj : rightMotors){
-            rightTemps.push_back(obj.get_temperature());
-        }
-
-        if(any_of(leftTemps.begin(), leftTemps.end(), [minErrTemp](int x){return x >= minErrTemp;}) || any_of(rightTemps.begin(), rightTemps.end(), [minErrTemp](int x){return x >= minErrTemp;}) || isInRange(getBatteryPercent(battery::get_capacity()), minErrBat, maxErrBat)){
-            return level::ERROR;
-        }
-
-        //WARN CLAUSE
-
-        int minWarnTemp = 44;
-        int maxWarnTemp = 50;
-        int minWarnBat = 25;
-        int maxWatnBat = 50;
-
-        if(any_of(leftTemps.begin(), leftTemps.end(), [minWarnTemp, maxWarnTemp](int x){return isInRange(x, minWarnTemp, maxWarnTemp);}) || any_of(rightTemps.begin(), rightTemps.end(), [minWarnTemp, maxWarnTemp](int x){return isInRange(x, minWarnTemp, maxWarnTemp);}) || isInRange(getBatteryPercent(battery::get_capacity()), minWarnBat, maxWatnBat)){
-            return level::WARN;
-        }
-
-        return level::INFO;
-        
-
-    }
 
     ostringstream formulateDataString(vector<Motor> leftMotors, vector<Motor> rightMotors, Controller controller, uint32_t time){
         ostringstream dataStream;
@@ -98,28 +42,8 @@ namespace duckTrace{
         return logFile;
     }
 
-    void writeLine(fstream* file, ostringstream* data, level logLevel){
-        ostringstream levelString;
-
-        switch(logLevel){
-            case level::FATAL:
-                levelString << "FATAL, ";
-                break;
-            
-            case level::ERROR:
-                levelString << "ERROR, ";
-                break;
-
-            case level::WARN:
-                levelString << "WARN, ";
-                break;
-
-            default:
-                levelString << "INFO, ";
-                break;
-        }
-
-        *file << levelString.str() << data->str();
+    void writeLine(fstream* file, ostringstream* data){
+        *file << data->str();
     }
 }
 
@@ -136,7 +60,7 @@ namespace duckTraceHelper{
         return logNameRuleFile;
     }
 
-    string uniqueLogName(controlMode mode = , fstream* logNameRuleFile){
+    string uniqueLogName(fstream* logNameRuleFile, controlMode mode = controlMode::OPERATOR){
         string competition, match, logName;
 
         getline(*logNameRuleFile, competition);
@@ -162,7 +86,7 @@ namespace duckTraceHelper{
                 logName += ".auton.skills";
                 break;
 
-            case default:
+            default:
                 logName += ".pit";
                 break;
         }
