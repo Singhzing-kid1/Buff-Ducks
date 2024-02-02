@@ -9,7 +9,7 @@ using namespace duckTraceHelper;
 void llscreen() {
     // loop forever
     while (true) {
-        lemlib::Pose pose = wheelThingyWithTracking.getPose(); // get the current position of the robot
+        lemlib::Pose pose = chassis.getPose(); // get the current position of the robot
         lcd::print(0, "x: %f", pose.x); // print the x position
         lcd::print(1, "y: %f", pose.y); // print the y position
         lcd::print(2, "heading: %f", pose.theta); // print the heading
@@ -25,6 +25,9 @@ void llscreen() {
  */
 void initialize() {
 	lcd::initialize();
+	chassis.calibrate();
+	Task screenTask(llscreen);
+	chassis.moveToPoint(10, 0, 1000);
 }
 
 /**
@@ -60,7 +63,6 @@ void competition_initialize() {}
  *
  */
 void autonomous() {
-	
 }
 
 /**

@@ -11,8 +11,8 @@ Motor rightMotor1(14, E_MOTOR_GEAR_BLUE, true);
 Motor rightMotor2(15, E_MOTOR_GEAR_BLUE, true);
 Motor rightMotor3(16, E_MOTOR_GEAR_BLUE, false);
 
-Motor_Group rightMotorGroup({leftMotor1, leftMotor2, leftMotor3});
-Motor_Group leftMotorGroup({rightMotor1, rightMotor2, rightMotor3});
+Motor_Group leftMotorGroup({leftMotor1, leftMotor2, leftMotor3});
+Motor_Group rightMotorGroup({rightMotor1, rightMotor2, rightMotor3});
 
 int32_t accelerate(int32_t newSpeed, int32_t oldSpeed){
     if(newSpeed > oldSpeed){

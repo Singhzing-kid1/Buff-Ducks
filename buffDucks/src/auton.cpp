@@ -4,43 +4,45 @@ using namespace std;
 using namespace pros;
 using namespace lemlib;
 
-Drivetrain_t tanktrain {
+Drivetrain tanktrain(
     &leftMotorGroup, // left drivetrain motors
     &rightMotorGroup, // right drivetrain motors
     12.75, // track width
-    3.25, // wheel diameter
-    360 // wheel rpm
-};
+    Omniwheel::NEW_325, // wheel diameter
+    360, // wheel rpm
+    2 //chase power. How fast the robot can corner
+);
 
-TrackingWheel leftTrackingWheel (&leftMotorGroup, 3.25, -6.375, 360);
-TrackingWheel rightTrackingWheel (&rightMotorGroup, 3.25, 6.375, 360);
-
-OdomSensors_t sensors{
-    &leftTrackingWheel,
-    &rightTrackingWheel,
+OdomSensors sensors(
+    nullptr,
+    nullptr,
     nullptr,
     nullptr,
     nullptr
-};
+);
 
-ChassisController_t lateralController{
-    8, // kP
-    30, // kD
-    1, // smallErrorRange
-    100, // smallErrorTimeout
-    3, // largeErrorRange
-    500, // largeErrorTimeout
-    5 // slew rate
-};
+ControllerSettings linearController(
+                                    10.0, // proportional gain (kP)
+                                    0.0,
+                                    30.0, // derivative gain (kD)
+                                    0.0,
+                                    1.0, // small error range, in inches
+                                    100.0, // small error range timeout, in milliseconds
+                                    3.0, // large error range, in inches
+                                    500.0, // large error range timeout, in milliseconds
+                                    20.0 // maximum acceleration (slew)
+);
 
-ChassisController_t angularController{
-    4, // kP
-    40, // kD
-    1, // smallErrorRange
-    100, // smallErrorTimeout
-    3, // largeErrorRange
-    500, // largeErrorTimeout
-    40 // slew rate
-};
+ControllerSettings angularController(
+                                    2.0, // proportional gain (kP)
+                                    0.0,
+                                    10.0, // derivative gain (kD)
+                                    0.0,
+                                    1.0, // small error range, in degrees
+                                    100.0, // small error range timeout, in milliseconds
+                                    3.0, // large error range, in degrees
+                                    500.0, // large error range timeout, in milliseconds
+                                    0.0 // maximum acceleration (slew). 0 means no limit
+);
 
-Chassis wheelThingyWithTracking (tanktrain, lateralController, angularController, sensors);
+Chassis chassis (tanktrain, linearController, angularController, sensors);

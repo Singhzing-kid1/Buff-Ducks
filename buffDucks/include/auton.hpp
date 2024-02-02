@@ -4,4 +4,4 @@ using namespace std;
 using namespace pros;
 using namespace lemlib;
 
-extern Chassis wheelThingyWithTracking;
+extern Chassis chassis;
