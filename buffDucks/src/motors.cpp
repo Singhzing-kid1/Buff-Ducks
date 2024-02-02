@@ -11,6 +11,8 @@ Motor rightMotor1(14, E_MOTOR_GEAR_BLUE, true);
 Motor rightMotor2(15, E_MOTOR_GEAR_BLUE, true);
 Motor rightMotor3(16, E_MOTOR_GEAR_BLUE, false);
 
+Motor blockerMotor(17, E_MOTOR_GEAR_RED, false);
+
 Motor_Group leftMotorGroup({leftMotor1, leftMotor2, leftMotor3});
 Motor_Group rightMotorGroup({rightMotor1, rightMotor2, rightMotor3});
 

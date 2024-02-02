@@ -27,7 +27,8 @@ void initialize() {
 	lcd::initialize();
 	chassis.calibrate();
 	Task screenTask(llscreen);
-	chassis.moveToPoint(10, 0, 1000);
+	chassis.turnTo(30, 0, 10000, false);
+	blockerMotor.set_brake_mode(E_MOTOR_BRAKE_HOLD);
 }
 
 /**
@@ -101,13 +102,21 @@ void opcontrol() {
 					break;
 
 				case false:
-					leftMotorGroup = leftSpeed;
-					rightMotorGroup = rightSpeed;
+					leftMotorGroup = rightSpeed;
+					rightMotorGroup = leftSpeed;
 					break;
 			}
 		} else {
 			leftMotorGroup.brake();
 			rightMotorGroup.brake();
+		}
+
+		if(master.get_digital(DIGITAL_R1) == 1){
+			blockerMotor.move(127);
+		} else if(master.get_digital(DIGITAL_R2) == 1){
+			blockerMotor.move(-127);
+		} else {
+			blockerMotor.brake();
 		}
 
 		//if(master.get_digital(DIGITAL_Y) != 0){ // current solution to get the log to save

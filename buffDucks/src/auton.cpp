@@ -7,22 +7,24 @@ using namespace lemlib;
 Drivetrain tanktrain(
     &leftMotorGroup, // left drivetrain motors
     &rightMotorGroup, // right drivetrain motors
-    12.75, // track width
+    -12.75, // track width
     Omniwheel::NEW_325, // wheel diameter
     360, // wheel rpm
     2 //chase power. How fast the robot can corner
 );
+
+Imu inertialSensor(19);
 
 OdomSensors sensors(
     nullptr,
     nullptr,
     nullptr,
     nullptr,
-    nullptr
+    &inertialSensor
 );
 
 ControllerSettings linearController(
-                                    10.0, // proportional gain (kP)
+                                    22.0, // proportional gain (kP)
                                     0.0,
                                     30.0, // derivative gain (kD)
                                     0.0,
@@ -36,7 +38,7 @@ ControllerSettings linearController(
 ControllerSettings angularController(
                                     2.0, // proportional gain (kP)
                                     0.0,
-                                    10.0, // derivative gain (kD)
+                                    20.0, // derivative gain (kD)
                                     0.0,
                                     1.0, // small error range, in degrees
                                     100.0, // small error range timeout, in milliseconds

@@ -3,6 +3,8 @@
 using namespace std;
 using namespace pros;
 
+extern Motor blockerMotor;
+
 extern Motor_Group rightMotorGroup;
 extern Motor_Group leftMotorGroup;
 
