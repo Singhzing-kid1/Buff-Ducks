@@ -27,8 +27,8 @@ void initialize() {
 	lcd::initialize();
 	chassis.calibrate();
 	Task screenTask(llscreen);
-	chassis.turnTo(30, 0, 10000, false);
 	blockerMotor.set_brake_mode(E_MOTOR_BRAKE_HOLD);
+	//ruleFile = initializeLogging();
 }
 
 /**
@@ -85,6 +85,8 @@ void opcontrol() {
 	int32_t rightSpeed = 0;
 	int32_t avgSpeed = 0;
 
+	ADIDigitalOut airHydraulics(2);   
+
 	//fstream operatorLogFile = createLogFile(uniqueLogName(&ruleFile , controlMode::OPERATOR));
 
 	//uint32_t startTime = millis();
@@ -119,9 +121,15 @@ void opcontrol() {
 			blockerMotor.brake();
 		}
 
+		if(master.get_digital(DIGITAL_A) == 1){
+			airHydraulics.set_value(HIGH);
+		} else {
+			airHydraulics.set_value(LOW);
+		}
+
 		//if(master.get_digital(DIGITAL_Y) != 0){ // current solution to get the log to save
-		//	closeAndUpdateRuleFile(&ruleFile); // used to call break; but this allows us to keep driving after saving the log.
-		//	operatorLogFile.close();
+			//closeAndUpdateRuleFile(&ruleFile); // used to call break; but this allows us to keep driving after saving the log.
+			//operatorLogFile.close();
 		//}
 
 		//ostringstream payload = formulateDataString({leftMotorGroup[0], leftMotorGroup[1], leftMotorGroup[2]}, {rightMotorGroup[0], rightMotorGroup[1], rightMotorGroup[2]}, master, millis() - startTime);

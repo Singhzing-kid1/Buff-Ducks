@@ -18,9 +18,9 @@ Motor_Group rightMotorGroup({rightMotor1, rightMotor2, rightMotor3});
 
 int32_t accelerate(int32_t newSpeed, int32_t oldSpeed){
     if(newSpeed > oldSpeed){
-        return oldSpeed += 5;
+        return oldSpeed += 20;
     } else if (newSpeed < oldSpeed){
-        return oldSpeed -= 5;
+        return oldSpeed -= 20;
     } else {
         return oldSpeed;
     }

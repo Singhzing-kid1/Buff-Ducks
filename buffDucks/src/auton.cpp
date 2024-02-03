@@ -38,7 +38,7 @@ ControllerSettings linearController(
 ControllerSettings angularController(
                                     2.0, // proportional gain (kP)
                                     0.0,
-                                    20.0, // derivative gain (kD)
+                                    50.0, // derivative gain (kD)
                                     0.0,
                                     1.0, // small error range, in degrees
                                     100.0, // small error range timeout, in milliseconds

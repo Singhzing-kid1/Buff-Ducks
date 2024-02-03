@@ -67,7 +67,7 @@ namespace duckTraceHelper{
         getline(*logNameRuleFile, match);
 
         logName += competition;
-        logName += to_string(stoi(match) + 1);  
+        logName += match;  
 
         switch(mode){
             case controlMode::AUTON:
@@ -98,16 +98,24 @@ namespace duckTraceHelper{
 
     void closeAndUpdateRuleFile(fstream* logNameRuleFile){
         int matchNum;
-        string buffer;
+        string bufferString;
 
-        getline(*logNameRuleFile, buffer);
+        istringstream buffer;
+
+        getline(*logNameRuleFile, bufferString);
         streampos pos = logNameRuleFile->tellg();
-        getline(*logNameRuleFile, buffer);
+        getline(*logNameRuleFile, bufferString);
 
         logNameRuleFile->seekg(pos);
-        matchNum = stoi(buffer) + 1;
 
-        *logNameRuleFile << to_string(matchNum) << "\n";
+        buffer.str("");
+        buffer.str(bufferString);
+
+        buffer >> matchNum;
+
+        matchNum += 1;
+
+        *logNameRuleFile << matchNum << "\n";
 
         logNameRuleFile->close();
     }
