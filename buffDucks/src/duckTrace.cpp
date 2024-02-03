@@ -59,10 +59,6 @@ namespace duckTraceHelper{
 
     fstream ruleFile;
 
-    bool isInRange(int value, int min, int max){
-        return (value > min && max < value);
-    }
-
     fstream initializeLogging(){
         fstream logNameRuleFile("/usd/logRuleFile.txt");
         return logNameRuleFile;

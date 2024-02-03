@@ -18,10 +18,6 @@ namespace duckTraceHelper{
 
     extern fstream ruleFile;
 
-    bool isInRange(int, int, int);
-
-    double getBatteryPercent(double);
-
     fstream initializeLogging();
 
     void closeAndUpdateRuleFile(fstream*);
