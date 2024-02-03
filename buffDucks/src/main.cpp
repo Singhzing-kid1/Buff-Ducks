@@ -28,7 +28,7 @@ void initialize() {
 	chassis.calibrate();
 	Task screenTask(llscreen);
 	blockerMotor.set_brake_mode(E_MOTOR_BRAKE_HOLD);
-	//ruleFile = initializeLogging();
+	ruleFile = initializeLogging();
 }
 
 /**
@@ -87,9 +87,11 @@ void opcontrol() {
 
 	ADIDigitalOut airHydraulics(2);   
 
-	//fstream operatorLogFile = createLogFile(uniqueLogName(&ruleFile , controlMode::OPERATOR));
+	fstream operatorLogFile = createLogFile(uniqueLogName(&ruleFile , controlMode::OPERATOR));
 
-	//uint32_t startTime = millis();
+	uint32_t startTime = millis();
+
+	vector<Motor> optionalMotorList = {blockerMotor};
 
 	while (true) {
 		rightSpeed = accelerate(deadzone(ANALOG_RIGHT_X, ANALOG_RIGHT_Y), rightSpeed);
@@ -127,13 +129,13 @@ void opcontrol() {
 			airHydraulics.set_value(LOW);
 		}
 
-		//if(master.get_digital(DIGITAL_Y) != 0){ // current solution to get the log to save
-			//closeAndUpdateRuleFile(&ruleFile); // used to call break; but this allows us to keep driving after saving the log.
-			//operatorLogFile.close();
-		//}
+		if(master.get_digital(DIGITAL_Y) != 0){ // current solution to get the log to save
+			closeAndUpdateRuleFile(&ruleFile); // used to call break; but this allows us to keep driving after saving the log.
+			operatorLogFile.close();
+		}
 
-		//ostringstream payload = formulateDataString({leftMotorGroup[0], leftMotorGroup[1], leftMotorGroup[2]}, {rightMotorGroup[0], rightMotorGroup[1], rightMotorGroup[2]}, master, millis() - startTime);
-		//writeLine(&operatorLogFile, &payload);
+		ostringstream payload = formulateDataString({leftMotorGroup[0], leftMotorGroup[1], leftMotorGroup[2]}, {rightMotorGroup[0], rightMotorGroup[1], rightMotorGroup[2]}, master, millis() - startTime, &optionalMotorList);
+		writeLine(&operatorLogFile, &payload);
 
 		pros::delay(20);
 	}
