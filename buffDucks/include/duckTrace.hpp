@@ -6,7 +6,7 @@ using namespace pros;
 #pragma once
 
 namespace duckTrace{
-    ostringstream formulateDataString(vector<Motor>, vector<Motor>, Controller, uint32_t);
+    ostringstream formulateDataString(vector<Motor>, vector<Motor>, Controller, uint32_t, vector<Motor>*);
 
     fstream createLogFile(string);
 

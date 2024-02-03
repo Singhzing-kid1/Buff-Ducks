@@ -7,10 +7,12 @@ using namespace duckTraceHelper;
 
 namespace duckTrace{
 
-    ostringstream formulateDataString(vector<Motor> leftMotors, vector<Motor> rightMotors, Controller controller, uint32_t time){
+    ostringstream formulateDataString(vector<Motor> leftMotors, vector<Motor> rightMotors, Controller controller, uint32_t time, vector<Motor>* optionalMotors = nullptr){
         ostringstream dataStream;
         ostringstream motorTemps;
         ostringstream motorEncoders;
+        ostringstream optionalMotorTemps;
+        ostringstream optionalMotorEnocders;
         ostringstream analogIns;
         ostringstream digitalIns;
         ostringstream batteries;
@@ -25,15 +27,21 @@ namespace duckTrace{
             motorEncoders << obj.get_position() << ", ";
         }
 
-        analogIns << controller.get_analog(ANALOG_LEFT_Y) << ", " << controller.get_analog(ANALOG_LEFT_X) << ", " << controller.get_analog(ANALOG_RIGHT_Y) << ", " << controller.get_analog(ANALOG_RIGHT_X) << ", ";
-        digitalIns << controller.get_digital(DIGITAL_L1) << ", " << controller.get_digital(DIGITAL_L2) << ", " << controller.get_digital(DIGITAL_R1) << ", " << controller.get_digital(DIGITAL_R2) << ", ";
-        batteries << controller.get_battery_level() << ", " << getBatteryPercent(battery::get_capacity()) << endl;
+        for(const auto& obj : *optionalMotors){
+            optionalMotorTemps << obj.get_temperature() << ", ";
+            optionalMotorEnocders << obj.get_position() << ", ";
+            
+        }
 
-        dataStream << time << motorTemps.str() << motorEncoders.str() << analogIns.str() << digitalIns.str() << batteries.str();
+        analogIns << controller.get_analog(ANALOG_LEFT_Y) << ", " << controller.get_analog(ANALOG_LEFT_X) << ", " << controller.get_analog(ANALOG_RIGHT_Y) << ", " << controller.get_analog(ANALOG_RIGHT_X) << ", ";
+        digitalIns << controller.get_digital(DIGITAL_L1) << ", " << controller.get_digital(DIGITAL_L2) << ", " << controller.get_digital(DIGITAL_R1) << ", " << controller.get_digital(DIGITAL_R2) << ", " << controller.get_digital(DIGITAL_A) << ", " << controller.get_digital(DIGITAL_Y) << ", ";
+        batteries << controller.get_battery_level() << ", " << battery::get_capacity() << endl;
+
+        dataStream << time << motorTemps.str() << motorEncoders.str() << optionalMotorTemps.str() << optionalMotorEnocders.str() << analogIns.str() << digitalIns.str() << batteries.str();
 
         return dataStream;
 
-        // ti, tR1, tR2, ... , tRn, tL1, tL2, ..., tLn, eR1, eR2, ... , eRn, eL1, eL2, ... , eLn, aLy, aLx, aRy, aRx, dL1, dL2, dR1, dR2, cb, b
+        // ti, tR1, tR2, ... , tRn, tL1, tL2, ..., tLn, eR1, eR2, ... , eRn, eL1, eL2, ... , eLn, oT1, oT2, ... , oTn, oE1, oE2, ... , oEn, aLy, aLx, aRy, aRx, dL1, dL2, dR1, dR2, dA, dY, cb, b
     }
 
     fstream createLogFile(string fileName){
@@ -60,7 +68,7 @@ namespace duckTraceHelper{
         return logNameRuleFile;
     }
 
-    string uniqueLogName(fstream* logNameRuleFile, controlMode mode = controlMode::OPERATOR){
+    string uniqueLogName(fstream* logNameRuleFile, controlMode mode = controlMode::PIT){
         string competition, match, logName;
 
         getline(*logNameRuleFile, competition);
@@ -86,7 +94,7 @@ namespace duckTraceHelper{
                 logName += ".auton.skills";
                 break;
 
-            default:
+            case controlMode::PIT:
                 logName += ".pit";
                 break;
         }
@@ -120,11 +128,5 @@ namespace duckTraceHelper{
         logNameRuleFile->close();
     }
 
-    double getBatteryPercent(double voltage){
-        double minVoltage = 10.0;
-        double maxVoltage = 14.6;
-
-        return (voltage - minVoltage)/(maxVoltage - minVoltage) * 100.0;
-    }
 }
 
