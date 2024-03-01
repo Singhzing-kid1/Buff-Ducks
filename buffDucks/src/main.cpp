@@ -27,7 +27,6 @@ void initialize() {
 	lcd::initialize();
 	chassis.calibrate();
 	Task screenTask(llscreen);
-	blockerMotor.set_brake_mode(E_MOTOR_BRAKE_HOLD);
 	ruleFile = initializeLogging();
 }
 
@@ -50,13 +49,10 @@ void disabled() {}
  */
 void competition_initialize() {}
 
-/**
-
+/**	
  * Runs the user autonomous code. This function will be started in its own task
  * with the default priority and stack size whenever the robot is enabled via
  * the Field Management System or the VEX Competition Switch in the autonomous
- * mode. Alternatively, this function may be called in initialize or opcontrol
- * for non-competition testing purposes.
  *
  * If the robot is disabled or communications is lost, the autonomous task
  * will be stopped. Re-enabling the robot will restart the task, not re-start it
@@ -91,7 +87,7 @@ void opcontrol() {
 
 	uint32_t startTime = millis();
 
-	vector<Motor> optionalMotorList = {blockerMotor};
+	vector<Motor> optionalMotorList = {intakeMotor};
 
 	while (true) {
 		rightSpeed = accelerate(deadzone(ANALOG_RIGHT_X, ANALOG_RIGHT_Y), rightSpeed);
@@ -106,8 +102,8 @@ void opcontrol() {
 					break;
 
 				case false:
-					leftMotorGroup = rightSpeed;
-					rightMotorGroup = leftSpeed;
+					leftMotorGroup = leftSpeed;
+					rightMotorGroup = rightSpeed;
 					break;
 			}
 		} else {
@@ -116,23 +112,26 @@ void opcontrol() {
 		}
 
 		if(master.get_digital(DIGITAL_R1) == 1){
-			blockerMotor.move(127);
+			intakeMotor.move(127);
 		} else if(master.get_digital(DIGITAL_R2) == 1){
-			blockerMotor.move(-127);
+			intakeMotor.move(-127);
 		} else {
-			blockerMotor.brake();
+			intakeMotor.brake();
 		}
 
-		if(master.get_digital(DIGITAL_A) == 1){
-			airHydraulics.set_value(HIGH);
-		} else {
-			airHydraulics.set_value(LOW);
-		}
+		//if(master.get_digital(DIGITAL_A) == 1){
+		//	airHydraulics.set_value(HIGH);
+		//} else {
+		//	airHydraulics.set_value(LOW);
+		//}
 
-		if(master.get_digital(DIGITAL_Y) != 0){ // current solution to get the log to save
+		if(master.get_digital(DIGITAL_Y) != 0 || millis() - startTime == 99980){ // current solution to get the log to save
+			cout << "saving";
 			closeAndUpdateRuleFile(&ruleFile); // used to call break; but this allows us to keep driving after saving the log.
 			operatorLogFile.close();
 		}
+
+		(millis() - startTime == 99980) ? cout << "bruh" << endl : cout << millis() - startTime << endl;
 
 		ostringstream payload = formulateDataString({leftMotorGroup[0], leftMotorGroup[1], leftMotorGroup[2]}, {rightMotorGroup[0], rightMotorGroup[1], rightMotorGroup[2]}, master, millis() - startTime, &optionalMotorList);
 		writeLine(&operatorLogFile, &payload);

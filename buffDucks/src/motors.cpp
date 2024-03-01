@@ -5,13 +5,13 @@ using namespace pros;
 
 Motor leftMotor1(11, E_MOTOR_GEAR_BLUE, false);
 Motor leftMotor2(12, E_MOTOR_GEAR_BLUE, false);
-Motor leftMotor3(13, E_MOTOR_GEAR_BLUE, true);
+Motor leftMotor3(13, E_MOTOR_GEAR_BLUE, false);
 
 Motor rightMotor1(14, E_MOTOR_GEAR_BLUE, true);
 Motor rightMotor2(15, E_MOTOR_GEAR_BLUE, true);
-Motor rightMotor3(16, E_MOTOR_GEAR_BLUE, false);
+Motor rightMotor3(16, E_MOTOR_GEAR_BLUE, true);
 
-Motor blockerMotor(17, E_MOTOR_GEAR_RED, false);
+Motor intakeMotor(17, E_MOTOR_GEAR_BLUE, false);
 
 Motor_Group leftMotorGroup({leftMotor1, leftMotor2, leftMotor3});
 Motor_Group rightMotorGroup({rightMotor1, rightMotor2, rightMotor3});

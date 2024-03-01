@@ -13,7 +13,7 @@ Drivetrain tanktrain(
     2 //chase power. How fast the robot can corner
 );
 
-Imu inertialSensor(19);
+Imu inertialSensor(1);
 
 OdomSensors sensors(
     nullptr,
