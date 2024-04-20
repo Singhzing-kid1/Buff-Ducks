@@ -60,6 +60,12 @@ void competition_initialize() {}
  *
  */
 void autonomous() {
+	leftMotorGroup = 127;
+	rightMotorGroup = 127;
+	pros::delay(1000); // may have to play around with the timing. set to one second for now.
+	leftMotorGroup.brake();
+	rightMotorGroup.brake();
+
 }
 
 /**
